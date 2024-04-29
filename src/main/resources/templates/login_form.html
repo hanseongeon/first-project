@@ -2,10 +2,10 @@
 <div layout:fragment="content" >
     <div class="contentsWrap">
         <div class="loginWindow">
-            <form action="">
+            <form th:action="@{|/user/login|}" method="post" >
             <img src="https://i.imgur.com/O86Blbb.png" alt="" id="instaLogo">
-            <input type="text" placeholder="전화번호, 사용자 이름 또는 이메일" class="inlineToBlock">
-            <input type="password" placeholder="비밀번호" class="inlineToBlock">
+            <input type="text" placeholder="전화번호, 사용자 이름 또는 이메일" class="inlineToBlock" name="username">
+            <input type="password" placeholder="비밀번호" class="inlineToBlock" name="password">
         <button class="inlineToBlock ordinaryLogin unactivatedLoginColor">Login
     <input type="submit" style="display:none">
         </button>

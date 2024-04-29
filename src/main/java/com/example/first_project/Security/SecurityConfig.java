@@ -21,8 +21,11 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .formLogin((formLogin) -> formLogin.loginPage("/user/login").defaultSuccessUrl("/"))
-                .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")))
+                .formLogin((formLogin) -> formLogin.loginPage("/user/login").defaultSuccessUrl("/user/main"))
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true))
 
         //OAuth 가 들어오면 이 서비스로 매핑됨
         ;

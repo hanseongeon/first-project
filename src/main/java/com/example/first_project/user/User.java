@@ -23,7 +23,7 @@ public class User {
     private Long id;
 
     @Column(unique = true)
-    private String userid;
+    private String username;
 
     private String nickname;
 
