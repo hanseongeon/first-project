@@ -1,0 +1,22 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+    <div class="contentsWrap">
+        <div class="loginWindow">
+            <form action="">
+            <img src="https://i.imgur.com/O86Blbb.png" alt="" id="instaLogo">
+            <input type="text" placeholder="전화번호, 사용자 이름 또는 이메일" class="inlineToBlock">
+            <input type="password" placeholder="비밀번호" class="inlineToBlock">
+        <button class="inlineToBlock ordinaryLogin unactivatedLoginColor">Login
+    <input type="submit" style="display:none">
+        </button>
+    </form>
+
+    </div>
+    <div class="haveAccount">
+        <p>계정이 없으신가요?
+          <a th:href="@{|/user/signup|}" class="noneunderline">가입하기</a>
+        </p>
+    </div>
+  </div>
+</div>
+</html>
