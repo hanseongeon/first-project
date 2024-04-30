@@ -10,14 +10,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QUser is a Querydsl query type for User
+ * QSiteUser is a Querydsl query type for SiteUser
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QUser extends EntityPathBase<User> {
+public class QSiteUser extends EntityPathBase<SiteUser> {
 
-    private static final long serialVersionUID = -1537249575L;
+    private static final long serialVersionUID = -1355575360L;
 
-    public static final QUser user = new QUser("user");
+    public static final QSiteUser siteUser = new QSiteUser("siteUser");
 
     public final StringPath email = createString("email");
 
@@ -31,16 +31,16 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath userRole = createString("userRole");
 
-    public QUser(String variable) {
-        super(User.class, forVariable(variable));
+    public QSiteUser(String variable) {
+        super(SiteUser.class, forVariable(variable));
     }
 
-    public QUser(Path<? extends User> path) {
+    public QSiteUser(Path<? extends SiteUser> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QUser(PathMetadata metadata) {
-        super(User.class, metadata);
+    public QSiteUser(PathMetadata metadata) {
+        super(SiteUser.class, metadata);
     }
 
 }

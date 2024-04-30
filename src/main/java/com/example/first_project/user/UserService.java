@@ -13,16 +13,16 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void createUser(String username, String password, String email) {
-        User user = new User();
-        user.setUsername(username);
-        user.setNickname(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setEmail(email);
-        this.userRepository.save(user);
+        SiteUser siteUser = new SiteUser();
+        siteUser.setUsername(username);
+        siteUser.setNickname(username);
+        siteUser.setPassword(passwordEncoder.encode(password));
+        siteUser.setEmail(email);
+        this.userRepository.save(siteUser);
     }
 
-    public User getUser(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
+    public SiteUser getUser(String username) {
+        Optional<SiteUser> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
             return user.get();
         } else {
