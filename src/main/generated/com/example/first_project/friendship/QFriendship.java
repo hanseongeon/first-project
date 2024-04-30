@@ -24,9 +24,9 @@ public class QFriendship extends EntityPathBase<Friendship> {
 
     public final BooleanPath allow = createBoolean("allow");
 
-    public final com.example.first_project.user.QUser friend1;
+    public final com.example.first_project.user.QSiteUser friend1;
 
-    public final com.example.first_project.user.QUser friend2;
+    public final com.example.first_project.user.QSiteUser friend2;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -48,8 +48,8 @@ public class QFriendship extends EntityPathBase<Friendship> {
 
     public QFriendship(Class<? extends Friendship> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.friend1 = inits.isInitialized("friend1") ? new com.example.first_project.user.QUser(forProperty("friend1")) : null;
-        this.friend2 = inits.isInitialized("friend2") ? new com.example.first_project.user.QUser(forProperty("friend2")) : null;
+        this.friend1 = inits.isInitialized("friend1") ? new com.example.first_project.user.QSiteUser(forProperty("friend1")) : null;
+        this.friend2 = inits.isInitialized("friend2") ? new com.example.first_project.user.QSiteUser(forProperty("friend2")) : null;
     }
 
 }

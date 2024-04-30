@@ -1,19 +1,17 @@
 package com.example.first_project.user;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 
 public class UserDetail implements UserDetails {
-    private final User user;
+    private final SiteUser siteUser;
 
-    public UserDetail(User user) {
-        this.user = user;
+    public UserDetail(SiteUser siteUser) {
+        this.siteUser = siteUser;
     }
 
     @Override
@@ -22,7 +20,7 @@ public class UserDetail implements UserDetails {
         collect.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return user.getUserRole();
+                return siteUser.getUserRole();
             }
         });
         return collect;
@@ -30,12 +28,12 @@ public class UserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return siteUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return siteUser.getUsername();
     }
 
     @Override
