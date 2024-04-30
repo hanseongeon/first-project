@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/user")
@@ -59,5 +60,14 @@ public class UserController {
     model.addAttribute("user",user);
 
     return "main_page";
+    }
+
+    @PostMapping("/searchFreind")
+    public String searchFreind(@RequestParam("username") String username,@AuthenticationPrincipal UserDetail userDetail){
+        User freindUser = userService.getUser(username);
+
+
+
+        return "";
     }
 }
