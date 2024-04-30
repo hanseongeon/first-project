@@ -21,13 +21,19 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public User getUser(String userid){
+    public User getUser(String userid) {
         Optional<User> user = userRepository.findByUsername(userid);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get();
-        }else{
+        } else {
             return null;
         }
 
     }
+
+    private void getFreind(User onweruser,User freind){
+        freind.setFriendOner(onweruser);
+        userRepository.save(freind);
+    }
+
 }
