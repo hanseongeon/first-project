@@ -19,10 +19,10 @@ public class FriendshipController {
     private final UserService userService;
     @PostMapping("/add")
     public String add(@RequestParam("username") String username, @AuthenticationPrincipal UserDetail userDetail){
-        User onwerUser = this.userService.getUser(userDetail.getUsername());
-        User friendUser = this.userService.getUser(username);
+        User friend1 = this.userService.getUser(userDetail.getUsername());
+        User friend2 = this.userService.getUser(username);
 
-        friendshipService.add(onwerUser,friendUser);
+        friendshipService.add(friend1,friend2);
 
         return "redirect/user/main";
     }

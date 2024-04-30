@@ -36,8 +36,8 @@ public class User {
 
     private String userRole;
 
-    @OneToMany(mappedBy = "user")
-    List<Friendship> friendshipList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    List<Friendship> friendshipList = new ArrayList<>();
 
 
 
