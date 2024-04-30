@@ -38,7 +38,7 @@ public class FriendshipCustomImpl implements FriendshipCustom {
                 .from(qFriendship)
                 .where(
                         (qFriendship.friend1.id.eq(id1).and(qFriendship.friend2.id.eq(id2)))
-                                .or(qFriendship.friend2.id.eq(id2).and(qFriendship.friend2.id.eq(id1))))
+                                .or(qFriendship.friend1.id.eq(id2).and(qFriendship.friend2.id.eq(id1))))
                 .fetchOne());
     }
 
