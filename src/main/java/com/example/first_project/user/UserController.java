@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -39,7 +42,7 @@ public class UserController {
             return "signup_form";
         }
         try {
-            userService.createUser(userCreateForm.getUserid(),
+            userService.createUser(userCreateForm.getUsername(),
                     userCreateForm.getPassword1(),userCreateForm.getEmail());
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
@@ -62,12 +65,4 @@ public class UserController {
     return "main_page";
     }
 
-    @PostMapping("/searchFreind")
-    public String searchFreind(@RequestParam("username") String username,@AuthenticationPrincipal UserDetail userDetail){
-        User freindUser = userService.getUser(username);
-
-
-
-        return "";
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.first_project.user;
 
+import com.example.first_project.friendship.Friendship;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -33,13 +34,10 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "friendOner")
-    private List<User> friendList = new ArrayList<>();
-
-    @ManyToOne
-    private User friendOner;
-
     private String userRole;
+
+    @OneToMany(mappedBy = "user")
+    List<Friendship> friendshipList = new ArrayList<>();
 
 
 
