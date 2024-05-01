@@ -58,6 +58,9 @@ public class UserController {
 
 @GetMapping("/main")
     public String main(@AuthenticationPrincipal UserDetail userDetail , Model model){
+        if(userDetail == null){
+            return "redirect:/user/login";
+        }
     SiteUser siteUser = userService.getUser(userDetail.getUsername());
     List<Friendship> friendRequest = this.friendshipService.getRequest(siteUser.getId());
     List<Friendship> acceptFriendList = this.friendshipService.getAccept(siteUser.getId());
