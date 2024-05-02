@@ -43,18 +43,6 @@
                     <button type="submit" class="btn btn-xs">검색</button>
                 </div>
             </form>
-            <!-- 테일윈드 css 고장나서 폼 따로 만듦 고쳐지면 삭제할것-->
-            <div th:each="accept : ${acceptFriend}">
-                <p th:text="${accept.friend1.nickname} + '님에게 친구요청이 왔습니다..!'"></p>
-                <div class="action-buttons">
-                    <form th:action="@{|/friend/list/${accept.friend1.id}|}" method="post">
-                        <input class="btn btn-success" type="submit" name="action" value="accept">
-                        <input class="btn btn-danger" type="submit" name="action" value="reject">
-                    </form>
-                </div>
-            </div>
-            <!--      여까지      -->
-
             <div tabindex="0" class="collapse bg-base-200 w-full flex flex-col">
                 <div class="collapse-title text-xl font-medium">
                     친구 요청
@@ -86,12 +74,22 @@
                     </div>
                 </div>
             </div>
-            <div th:if="${friendshipList != null}">
-                <ul>
-                    <li th:each="list : ${friendshipList}"
-                        th:text="${list.friend2.nickname ==  user.nickname ? list.friend1.nickname : list.friend2.nickname}"></li>
-                </ul>
+            <div tabindex="0" class="collapse bg-base-200 w-full flex flex-col">
+                <div class="collapse-title text-xl font-medium">
+                    친구목록
+                </div>
+                <div class="collapse-content">
+                    <div class="friend-request">
+                        <div th:if="${friendshipList != null}">
+                            <ul>
+                                <li th:each="list : ${friendshipList}"
+                                    th:text="${list.friend2.nickname ==  user.nickname ? list.friend1.nickname : list.friend2.nickname}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
