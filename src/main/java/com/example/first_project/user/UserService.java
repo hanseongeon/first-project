@@ -29,7 +29,15 @@ public class UserService {
         } else {
             return null;
         }
+    }
 
+    public SiteUser getUserNickname(String nickname) {
+        Optional<SiteUser> user = userRepository.findByNickname(nickname);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
     }
 
     public String generateTempPassword(int length) {

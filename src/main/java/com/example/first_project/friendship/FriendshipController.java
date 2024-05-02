@@ -19,9 +19,9 @@ public class FriendshipController {
     private final FriendshipService friendshipService;
     private final UserService userService;
     @PostMapping("/add")
-    public String add(@RequestParam("username") String username, @AuthenticationPrincipal UserDetail userDetail){
+    public String add(@RequestParam("nickname") String nickname, @AuthenticationPrincipal UserDetail userDetail){
         SiteUser friend1 = this.userService.getUser(userDetail.getUsername());
-        SiteUser friend2 = this.userService.getUser(username);
+        SiteUser friend2 = this.userService.getUserNickname(nickname);
 
         friendshipService.add(friend1,friend2);
 
