@@ -40,6 +40,23 @@
                     <button type="submit" class="btn btn-xs">검색</button>
                 </div>
             </form>
+
+<!--            <div th:each="accept : ${acceptFriend}">-->
+<!--                <p th:text="${accept.friend1.username} + '님에게 친구요청이 왔습니다..!'"></p>-->
+<!--                <div class="action-buttons">-->
+<!--                    <form th:action="@{|/friend/list/${accept.friend1.id}|}" method="post">-->
+<!--                        &lt;!&ndash;                                    <input type="submit" value="dfdf">&ndash;&gt;-->
+<!--                        <input class="btn btn-success" type="submit" name="action" value="accept">-->
+<!--                        <input class="btn btn-danger" type="submit" name="action" value="reject">-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div th:if="${friendshipList != null}">-->
+<!--                <ul>-->
+<!--                    <li th:each="list : ${friendshipList}" th:text="${list.friend1.username}"> </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+
             <div tabindex="0" class="collapse bg-base-200 w-full flex flex-col">
                 <div class="collapse-title text-xl font-medium">
                     친구 요청
@@ -56,17 +73,26 @@
                 <div class="collapse-title text-xl font-medium">
                     친구 요청 목록
                 </div>
+
                 <div class="collapse-content">
                     <div class="friend-request">
-                        <div th:each="accpet : ${acceptFriend}">
-                            <p th:text="${accpet.friend1.username} + '님에게 친구요청이 왔습니다..!'"></p>
+                        <div th:each="accept : ${acceptFriend}">
+                            <p th:text="${accept.friend1.username} + '님에게 친구요청이 왔습니다..!'"></p>
                             <div class="action-buttons">
-                                <button class="btn btn-success" onclick="acceptFriendRequest()">수락</button>
-                                <button class="btn btn-danger" onclick="rejectFriendRequest()">거절</button>
+                                <form th:action="@{|/friend/list/${accept.friend1.id}|}" method="post">
+<!--                                    <input type="submit" value="dfdf">-->
+                                <input class="btn btn-success" type="submit" name="action" value="accept">
+                                <input class="btn btn-danger" type="submit" name="action" value="reject">
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div th:if="${friendshipList != null}">
+                <ul>
+                    <li th:each="list : ${friendshipList}" th:text="${list.friend2.username}"> </li>
+                </ul>
             </div>
         </div>
     </div>

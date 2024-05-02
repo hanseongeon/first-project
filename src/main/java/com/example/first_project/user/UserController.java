@@ -64,10 +64,12 @@ public class UserController {
     SiteUser siteUser = userService.getUser(userDetail.getUsername());
     List<Friendship> friendRequest = this.friendshipService.getRequest(siteUser.getId());
     List<Friendship> acceptFriendList = this.friendshipService.getAccept(siteUser.getId());
+    List<Friendship> friendshipList = this.friendshipService.getFriendshipList(siteUser.getId());
 
     model.addAttribute("user", siteUser);
     model.addAttribute("friendRequest", friendRequest);
     model.addAttribute("acceptFriend", acceptFriendList);
+    model.addAttribute("friendshipList",friendshipList);
 
     return "main_page";
     }

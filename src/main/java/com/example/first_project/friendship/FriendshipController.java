@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,8 +29,19 @@ public class FriendshipController {
     }
 
     // 친구요청 수락 및 거절 누르면 넘어오는 맵핑(수락시 allow = true , 거절시 allow = false 처리하여 메인페이지로 리다이렉트 예정)
-//        @PostMapping("/list")
-//    public String list (){
-//
-//        }
+        @PostMapping("/list/{id}")
+    public String list (@AuthenticationPrincipal UserDetail userDetail, @PathVariable("id") Long id,@RequestParam("action") String action){
+            if(action.equals("accept")){
+                SiteUser siteUser = this.userService.getUser(userDetail.getUsername());
+                Friendship friendship = this.friendshipService.getFriendship(id,siteUser.getId());
+                friendship.setAllow(true);
+                friendshipService.saveFriendship(friendship);
+            }else{
+                SiteUser siteUser = this.userService.getUser(userDetail.getUsername());
+                Friendship friendship2 = this.friendshipService.getFriendship(id,siteUser.getId());
+                friendshipService.deleteFriendship(friendship2);
+            }
+
+            return "redirect:/user/main";
+        }
 }
