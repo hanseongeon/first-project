@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.Optional;
 
 @Service
@@ -31,5 +32,29 @@ public class UserService {
 
     }
 
+    public String generateTempPassword(int length) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        return sb.toString();
+    }
+
+    public void temp_save(SiteUser siteUser,String tempPassword) {
+        siteUser.setPassword(passwordEncoder.encode(tempPassword));
+        this.userRepository.save(siteUser);
+    }
+
+    public void updateUser(SiteUser siteUser, String nickname){
+        siteUser.setNickname(nickname);
+        userRepository.save(siteUser);
+    }
+
+    public void updatePassword(SiteUser siteUser,String newpassword1){
+      siteUser.setPassword(passwordEncoder.encode(newpassword1));
+      userRepository.save(siteUser);
+    }
 
 }

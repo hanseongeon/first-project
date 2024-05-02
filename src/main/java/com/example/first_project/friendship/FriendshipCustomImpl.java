@@ -44,12 +44,12 @@
 
         @Override
         public List<Friendship> findByOwner(Long id) {
-            return jpaQueryFactory.select(qFriendship).from(qFriendship).where(qFriendship.friend1.id.eq(id)).fetch();
+            return jpaQueryFactory.select(qFriendship).from(qFriendship).where(qFriendship.friend1.id.eq(id).and(qFriendship.allow.eq(false))).fetch();
         }
 
         @Override
         public List<Friendship> findByFriend(Long id) {
-            return jpaQueryFactory.select(qFriendship).from(qFriendship).where(qFriendship.friend2.id.eq(id)).fetch();
+            return jpaQueryFactory.select(qFriendship).from(qFriendship).where(qFriendship.friend2.id.eq(id).and(qFriendship.allow.eq(false))).fetch();
         }
 
         public Friendship findByFriend1AndFriend2(Long id1,Long id2){
@@ -57,6 +57,6 @@
         }
 
         public List<Friendship> findByFriendList(Long id1){
-            return jpaQueryFactory.select(qFriendship).from(qFriendship).where(qFriendship.friend2.id.eq(id1).and(qFriendship.allow.eq(true))).fetch();
+            return jpaQueryFactory.select(qFriendship).from(qFriendship).where(qFriendship.friend2.id.eq(id1).and(qFriendship.allow.eq(true)).or(qFriendship.friend1.id.eq(id1).and(qFriendship.allow.eq(true)))).fetch();
         }
     }

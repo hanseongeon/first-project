@@ -31,6 +31,8 @@ public class SiteUser {
 
     private String userRole;
 
+    private String url;
+
 //    @OneToMany(mappedBy = "user")
 //    List<Friendship> friendshipList = new ArrayList<>();
 

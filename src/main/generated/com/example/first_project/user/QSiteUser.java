@@ -27,6 +27,8 @@ public class QSiteUser extends EntityPathBase<SiteUser> {
 
     public final StringPath password = createString("password");
 
+    public final StringPath url = createString("url");
+
     public final StringPath username = createString("username");
 
     public final StringPath userRole = createString("userRole");
