@@ -30,22 +30,28 @@
                     <a th:href="@{/user/update}" style="color: inherit; text-decoration: none">개인정보 수정</a>
                 </div>
             </div>
-
-            <form th:action="@{/friend/add}" method="post">
-                <div class="input input-bordered flex items-center gap-2">
-                    <input type="text" class="grow" placeholder="Search" name="nickname"/>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                         class="w-4 h-4 opacity-70">
-                        <path fill-rule="evenodd"
-                              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                              clip-rule="evenodd"/>
-                    </svg>
-                    <button type="submit" class="btn btn-xs">검색</button>
-                </div>
-            </form>
             <div tabindex="0" class="collapse bg-base-200 w-full flex flex-col">
                 <div class="collapse-title text-xl font-medium">
-                    친구 요청
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div class="collapse-content">
+                    <form th:action="@{/friend/add}" method="post">
+                        <div class="input input-bordered flex items-center gap-2">
+                            <input type="text" class="grow" placeholder="Search" name="nickname"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                                 class="w-4 h-4 opacity-70">
+                                <path fill-rule="evenodd"
+                                      d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                            <button type="submit" class="btn btn-xs">친추추가</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div tabindex="0" class="collapse bg-base-200 w-full flex flex-col">
+                <div class="collapse-title text-xl font-medium">
+                    <i class="fa-solid fa-message"></i>
                 </div>
                 <div class="collapse-content">
                     <div class="friend-request">
@@ -57,9 +63,8 @@
             </div>
             <div tabindex="0" class="collapse bg-base-200 w-full flex flex-col">
                 <div class="collapse-title text-xl font-medium">
-                    친구 요청 목록
+                    <i class="fa-solid fa-users-gear"></i>
                 </div>
-
                 <div class="collapse-content">
                     <div class="friend-request">
                         <div th:each="accept : ${acceptFriend}">
@@ -76,7 +81,7 @@
             </div>
             <div tabindex="0" class="collapse bg-base-200 w-full flex flex-col">
                 <div class="collapse-title text-xl font-medium">
-                    친구목록
+                    <i class="fa-solid fa-user-group"></i>
                 </div>
                 <div class="collapse-content">
                     <div class="friend-request">
@@ -89,7 +94,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
