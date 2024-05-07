@@ -1,0 +1,40 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+    <div>
+        <a href="/chat/create"> 채팅방 만들기</a>
+    </div>
+
+    <div>
+        <ul>
+            <li th:if="${chatroomList != null}" th:each="chatroom : ${chatroomList}">
+                <a class="talk" th:href="@{/chat/talk}" th:text="${chatroom.roomId}"></a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    function connect() {
+          var socket = new SockJS("ws://localhost:8088/ws-stomp");
+          stompClient = Stomp.over(socket);
+          stompClient.connect({}, function (frame) {
+              setConnected(true);
+              console.log('Connected: ');
+
+              //구독
+              stompClient.subscribe('/sub/talk', function (chatMessage) {
+                    console.log("----------->");
+                    console.log(chatMessage);
+                  showChat(JSON.parse(chatMessage.body));
+              });
+          });
+      }
+
+  $(function () {
+        $(document).on("click", ".talk", function(event) {
+            event.preventDefault(); // 링크의 기본 동작인 페이지 이동을 막음
+            connect(); // 웹소켓 연결
+        });
+</script>
+</html>

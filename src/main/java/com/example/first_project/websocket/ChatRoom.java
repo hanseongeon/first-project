@@ -1,8 +1,7 @@
 package com.example.first_project.websocket;
 
 import com.example.first_project.user.SiteUser;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,19 +14,12 @@ import java.util.UUID;
 @Setter
 @Entity
 public class ChatRoom {
+    @Id
     private String roomId;
 
-    @OneToMany
+    @OneToMany(mappedBy = "chatRoom" ,cascade = CascadeType.REMOVE)
     List<ChatMessage> chatMessageList = new ArrayList<>();
 
-    @OneToMany
-    List<SiteUser> siteUserList = new ArrayList<>();
-    @Builder
-    public ChatRoom(ChatMessage chatMessage1,ChatMessage chatMessage2,SiteUser user1, SiteUser user2) {
-        this.chatMessageList.add(chatMessage1);
-        this.chatMessageList.add(chatMessage2);
-        this.siteUserList.add(user1);
-        this.siteUserList.add(user2);
-        this.setRoomId(UUID.randomUUID().toString());
-    }
+
+
 }

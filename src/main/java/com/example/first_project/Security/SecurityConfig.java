@@ -21,6 +21,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/pub/**", "/sub/**"))
                 .formLogin((formLogin) -> formLogin.loginPage("/user/login").defaultSuccessUrl("/user/main"))
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))

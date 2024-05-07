@@ -30,6 +30,14 @@ public class UserService {
             return null;
         }
     }
+    public SiteUser getUserId(Long id){
+        Optional<SiteUser> user = userRepository.findById(id);
+        if(user.isPresent()){
+            return user.get();
+        }else{
+            return null;
+        }
+    }
 
     public SiteUser getUserNickname(String nickname) {
         Optional<SiteUser> user = userRepository.findByNickname(nickname);
