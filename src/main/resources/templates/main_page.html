@@ -81,20 +81,24 @@
             </div>
             <div tabindex="0" class="collapse bg-base-200 w-full flex flex-col">
                 <div class="collapse-title text-xl font-medium">
-                    <i class="fa-solid fa-user-group"></i>
+                    <i class="fa-solid fa-user-group "></i>
                 </div>
                 <div class="collapse-content">
                     <div class="friend-request">
                         <div th:if="${friendshipList != null}">
                             <ul>
-                                <li th:each="list : ${friendshipList}"
-                                    th:text="${list.friend2.nickname ==  user.nickname ? list.friend1.nickname : list.friend2.nickname}"></li>
+                                <li th:each="list : ${friendshipList}">
+                                    <a href="#"  th:text="${list.friend2.nickname ==  user.nickname ? list.friend1.nickname : list.friend2.nickname}"></a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div>
+        <a th:href="@{/chat/list}">채팅방 목록</a>
     </div>
 </div>
 </html>

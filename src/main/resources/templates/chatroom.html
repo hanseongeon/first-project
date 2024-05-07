@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+<div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h1 class="text-2xl font-bold mb-4">Chat Room</h1>
+    <div id="messages" class="h-64 overflow-y-auto mb-4">
+      <div>greeting
+          <div id="greetings"></div>
+      </div>
+
+    </div>
+    <input id="message" type="text" class="border border-gray-300 rounded-lg p-2 w-full mb-4" placeholder="Type your message...">
+    <button id="sendButton" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg">Send</button>
+</div>
+<div>
+    <button id="connect" type="submit">연결</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+<script th:inline="javascript">
+    function connect() {
+      var socket = new SockJS("http://localhost:8088/ws-stomp");
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function (frame) {
+          //구독
+          stompClient.subscribe('/sub/talk', function (chatMessage) {
+                 console.log("----------->");
+                    console.log(chatMessage);
+              showChat(JSON.parse(chatMessage.body));
+          });
+      });
+  }
+
+
+
+//html 에서 입력값, roomId 를 받아서 Controller 로 전달
+ function sendChat() {
+     if ($("#message").val() != "") {
+         stompClient.send("/pub/talk", {},
+             JSON.stringify({
+                 'roomId' : 1,
+                 'sender' : 'aaa',
+                 'message' : $("#message").val(),
+                 'ChatRoom' : {}
+             }));
+         $("#message").val('');
+           showChat({'message': $("#message").val()});
+     }
+ }
+
+    function showChat(chatMessage) {
+        $("#greetings").append(
+            "<div class = 'chatting_own'><tr><td>" + chatMessage.message + "</td></tr></div>"
+        );
+
+}
+
+        $(function () {
+        $( "#sendButton" ).click(function() { sendChat(); });
+        $( "#connect" ).click(() => connect());
+    });
+</script>
+</body>
+</html>
