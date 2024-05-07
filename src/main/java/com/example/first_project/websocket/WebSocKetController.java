@@ -48,8 +48,6 @@ public class WebSocKetController {
   @MessageMapping("/talk")
   @SendTo("/sub/talk")
   public ChatMessage message(ChatMessage message) throws Exception{
-    System.out.println("------------------------------->");
-    System.out.println(message);
     return message;
   }
 

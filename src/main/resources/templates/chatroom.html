@@ -31,8 +31,6 @@
       stompClient.connect({}, function (frame) {
           //구독
           stompClient.subscribe('/sub/talk', function (chatMessage) {
-                 console.log("----------->");
-                    console.log(chatMessage);
               showChat(JSON.parse(chatMessage.body));
           });
       });
