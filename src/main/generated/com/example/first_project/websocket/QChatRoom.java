@@ -22,7 +22,9 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public final ListPath<ChatMessage, QChatMessage> chatMessageList = this.<ChatMessage, QChatMessage>createList("chatMessageList", ChatMessage.class, QChatMessage.class, PathInits.DIRECT2);
 
-    public final StringPath roomId = createString("roomId");
+    public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final ListPath<com.example.first_project.user.SiteUser, com.example.first_project.user.QSiteUser> siteUserList = this.<com.example.first_project.user.SiteUser, com.example.first_project.user.QSiteUser>createList("siteUserList", com.example.first_project.user.SiteUser.class, com.example.first_project.user.QSiteUser.class, PathInits.DIRECT2);
 
     public QChatRoom(String variable) {
         super(ChatRoom.class, forVariable(variable));

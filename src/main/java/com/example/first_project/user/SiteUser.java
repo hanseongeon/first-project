@@ -1,11 +1,15 @@
 package com.example.first_project.user;
 
+import com.example.first_project.websocket.ChatRoom;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +37,8 @@ public class SiteUser {
 
     private String url;
 
+    @ManyToMany
+    private List<ChatRoom> chatRoomList = new ArrayList<>();
 //    @OneToMany(mappedBy = "user")
 //    List<Friendship> friendshipList = new ArrayList<>();
 

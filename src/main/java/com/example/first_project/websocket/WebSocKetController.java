@@ -20,6 +20,7 @@ import java.util.UUID;
 public class WebSocKetController {
     private final UserService userService;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
   @GetMapping("/chat/list")
     public String list(Model model){
@@ -31,10 +32,9 @@ public class WebSocKetController {
   }
 
   @GetMapping("/chat/create")
-    private String create(){
-      ChatRoom chatRoom = new ChatRoom();
-      chatRoom.setRoomId(UUID.randomUUID().toString());
-      chatRoomRepository.save(chatRoom);
+    public String create(){
+//      ChatRoom chatRoom = new ChatRoom();
+//      chatRoomRepository.save(chatRoom);
 
       return "redirect:/chat/list";
   }
@@ -45,9 +45,11 @@ public class WebSocKetController {
       return "chatroom";
   }
 
-  @MessageMapping("/talk")
-  @SendTo("/sub/talk")
-  public ChatMessage message(ChatMessage message) throws Exception{
+  @MessageMapping("/talk/{ownerUserId}/{friendUserId}")
+  @SendTo("/sub/talk/{ownerUserId}/{friendUserId}")
+  public ChatMessage message(ChatMessage message,@PathVariable("ownerUserId") Long ownerUserId,@PathVariable("friendUserId") Long friendUserId) throws Exception{
+      ChatMessage chatMessage = ChatMessage.builder().sender(message.getSender()).message(message.getMessage()).chatRoom(message.getChatRoom()).build();
+      chatMessageRepository.save(chatMessage);
     return message;
   }
 
