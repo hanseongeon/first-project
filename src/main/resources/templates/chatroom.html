@@ -28,9 +28,14 @@
     function connect() {
       var socket = new SockJS("http://localhost:8088/ws-stomp");
       stompClient = Stomp.over(socket);
+      console.log('hi');
+
+      /*[[${ownerUser.id}]]*/null;
+
       stompClient.connect({}, function (frame) {
+      console.log('connect');
           //구독
-          stompClient.subscribe('/sub/talk', function (chatMessage) {
+          stompClient.subscribe('/sub/talk//[[${friendUser.id}]]', function (chatMessage) {
               showChat(JSON.parse(chatMessage.body));
           });
       });
@@ -41,12 +46,12 @@
 //html 에서 입력값, roomId 를 받아서 Controller 로 전달
  function sendChat() {
      if ($("#message").val() != "") {
-         stompClient.send("/pub/talk", {},
+         stompClient.send("/pub/talk/[[${ownerUser.id}]]/[[${friendUser.id}]]", {},
              JSON.stringify({
-                 'roomId' : 1,
-                 'sender' : 'aaa',
+                 'roomId' : '',
+                 'sender' : [[${ownerUser.username}]],
                  'message' : $("#message").val(),
-                 'ChatRoom' : {}
+                 'ChatRoom' : {chatroom}
              }));
          $("#message").val('');
            showChat({'message': $("#message").val()});
@@ -55,15 +60,25 @@
 
     function showChat(chatMessage) {
         $("#greetings").append(
+        if(chatMessage.sender != /*[[${authentication.username}]]*/{
+            "<div class = 'chatting_own'><tr><td>" + chatMessage.sender + "</td></tr></div>"
             "<div class = 'chatting_own'><tr><td>" + chatMessage.message + "</td></tr></div>"
+         }else{
+          "<div class = 'chatting_own'><tr><td>" + chatMessage.message + "</td></tr></div>"
+         }
         );
 
 }
 
         $(function () {
         $( "#sendButton" ).click(function() { sendChat(); });
-        $( "#connect" ).click(() => connect());
     });
+
+     // 페이지 로드 후 실행되는 부분
+ document.addEventListener('DOMContentLoaded', function() {
+    connect();
+ });
+
 </script>
 </body>
 </html>

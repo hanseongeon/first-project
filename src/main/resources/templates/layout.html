@@ -33,8 +33,6 @@
  function getLoggedInUser() {
 
     const aa = /*[[${#authentication}]]*/ null;
-    console.log("aaaaaaa");
-    console.log(aa.name);
 
     if(aa.name === "anonymousUser") {
         return null;
@@ -42,26 +40,12 @@
 
     return aa.name;
 
-<!--     var cookieValue = null;-->
-<!--     // 쿠키 이름은 여러분이 설정한 것과 동일해야 합니다.-->
-<!--     var cookieName = 'JSESSIONID';-->
-<!--     var decodedCookie = decodeURIComponent(document.cookie);-->
-<!--     var cookieArray = decodedCookie.split(';');-->
-<!--     for(var i = 0; i < cookieArray.length; i++) {-->
-<!--         var cookie = cookieArray[i].trim();-->
-<!--         if (cookie.indexOf(cookieName) === 0) {-->
-<!--             cookieValue = cookie.substring(cookieName.length + 1, cookie.length);-->
-<!--             break;-->
-<!--         }-->
-<!--     }-->
-<!--     return cookieValue;-->
  }
 
  // 현재 로그인된 사용자 확인 및 웹소켓 연결
  function connectIfLoggedIn() {
      var loggedInUser = getLoggedInUser();
      if (loggedInUser != null) {
-        console.log('dfsdfsdf');
          connectWebSocket(loggedInUser);
      } else {
          console.log('로그인되지 않은 상태입니다.');
@@ -85,7 +69,7 @@
 
  // 페이지 로드 후 실행되는 부분
  document.addEventListener('DOMContentLoaded', function() {
-     // 페이지 로드 시 로그인 여부를 확인하고 웹소켓에 연결
+ // 페이지 로드 시 로그인 여부를 확인하고 웹소켓에 연결
      connectIfLoggedIn();
  });
 

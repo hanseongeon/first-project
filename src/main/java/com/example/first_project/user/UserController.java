@@ -3,6 +3,7 @@ package com.example.first_project.user;
 import com.example.first_project.email.EmailService;
 import com.example.first_project.friendship.Friendship;
 import com.example.first_project.friendship.FriendshipService;
+import com.example.first_project.websocket.ChatRoom;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,10 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -144,5 +142,17 @@ public class UserController {
             model.addAttribute("error","현재 비밀번호가 틀립니다.");
             return "passwordUpdate_form";
         }
+    }
+
+    @GetMapping("/talk/{id}")
+    public String talk(Model model, @PathVariable("id") Long friendId,@AuthenticationPrincipal UserDetail userDetail){
+        SiteUser ownerUser = userService.getUser(userDetail.getUsername());
+        SiteUser friendUser = userService.getUserId(friendId);
+        ChatRoom chatRoom = ChatRoom.builder().user1(ownerUser).user2(friendUser).build();
+        model.addAttribute("ownerUser",ownerUser);
+        model.addAttribute("friendUser",friendUser);
+        model.addAttribute("chatroom",chatRoom);
+
+        return "chatroom";
     }
 }
