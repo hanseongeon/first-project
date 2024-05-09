@@ -45,12 +45,19 @@ public class WebSocKetController {
       return "chatroom";
   }
 
-  @MessageMapping("/talk/{ownerUserId}/{friendUserId}")
-  @SendTo("/sub/talk/{ownerUserId}/{friendUserId}")
-  public ChatMessage message(ChatMessage message,@PathVariable("ownerUserId") Long ownerUserId,@PathVariable("friendUserId") Long friendUserId) throws Exception{
+  @MessageMapping("/talk/{chatroomid}")
+  @SendTo("/sub/talk/{chatroomid}")
+  public ChatMessage message(ChatMessage message,@PathVariable("chatroomid") Long chatroomid) throws Exception{
       ChatMessage chatMessage = ChatMessage.builder().sender(message.getSender()).message(message.getMessage()).chatRoom(message.getChatRoom()).build();
       chatMessageRepository.save(chatMessage);
     return message;
   }
+
+    @MessageMapping("/talk")
+    @SendTo("/sub/talk")
+    public ChatMessage message(ChatMessage message) throws Exception{
+
+        return message;
+    }
 
 }

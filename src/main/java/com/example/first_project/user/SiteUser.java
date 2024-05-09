@@ -39,8 +39,6 @@ public class SiteUser {
 
     @ManyToMany
     private List<ChatRoom> chatRoomList = new ArrayList<>();
-//    @OneToMany(mappedBy = "user")
-//    List<Friendship> friendshipList = new ArrayList<>();
 
 
 

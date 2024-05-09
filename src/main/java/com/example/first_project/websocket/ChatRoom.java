@@ -11,20 +11,24 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "chatRoom" ,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     List<ChatMessage> chatMessageList = new ArrayList<>();
 
-    @ManyToMany
-    List<SiteUser> siteUserList = new ArrayList<>();
+    @ManyToOne
+    private SiteUser user;
+
+    @ManyToOne
+    private SiteUser user2;
 
     @Builder
-    private ChatRoom(SiteUser user1,SiteUser user2){
-        this.siteUserList.add(user1);
-        this.siteUserList.add(user2);
+    private ChatRoom(SiteUser user1, SiteUser user2) {
+        this.user = user1;
+        this.user2 = user2;
     }
 }

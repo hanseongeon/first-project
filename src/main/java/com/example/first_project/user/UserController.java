@@ -4,6 +4,7 @@ import com.example.first_project.email.EmailService;
 import com.example.first_project.friendship.Friendship;
 import com.example.first_project.friendship.FriendshipService;
 import com.example.first_project.websocket.ChatRoom;
+import com.example.first_project.websocket.ChatRoomService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -23,6 +25,7 @@ public class UserController {
     private final UserService userService;
     private final FriendshipService friendshipService;
     private final EmailService emailService;
+    private final ChatRoomService chatRoomService;
     @Value("${temp.password.length}")
     private int tempPasswordLength;
 
@@ -148,10 +151,16 @@ public class UserController {
     public String talk(Model model, @PathVariable("id") Long friendId,@AuthenticationPrincipal UserDetail userDetail){
         SiteUser ownerUser = userService.getUser(userDetail.getUsername());
         SiteUser friendUser = userService.getUserId(friendId);
-        ChatRoom chatRoom = ChatRoom.builder().user1(ownerUser).user2(friendUser).build();
+        Optional<ChatRoom> chatRoom = chatRoomService.getChatRoom(ownerUser,friendUser);
+        if(chatRoom.isPresent()){
+            model.addAttribute("chatroom",chatRoom.get());
+        }else{
+            ChatRoom chatRoom1 =ChatRoom.builder().user1(ownerUser).user2(friendUser).build();
+            chatRoom1 = chatRoomService.save(chatRoom1);
+            model.addAttribute("chatroom",chatRoom1);
+        }
         model.addAttribute("ownerUser",ownerUser);
         model.addAttribute("friendUser",friendUser);
-        model.addAttribute("chatroom",chatRoom);
 
         return "chatroom";
     }

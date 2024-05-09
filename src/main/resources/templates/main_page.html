@@ -84,7 +84,7 @@
                         <div th:if="${friendshipList != null}">
                             <ul>
                                 <li th:each="list : ${friendshipList}">
-                                    <a th:href="@{|/user/talk/${list.friend2.id}|}"
+                                    <a th:href="@{|/user/talk/${user.id == list.friend2.id ? list.friend1.id : list.friend2.id}|}"
                                        th:text="${list.friend2.nickname ==  user.nickname ? list.friend1.nickname : list.friend2.nickname}"></a>
                                 </li>
                             </ul>

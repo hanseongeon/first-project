@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Room</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+<div class="bg-gray-100 flex items-center justify-center h-screen">
 <div class="bg-white p-6 rounded-lg shadow-lg w-96">
     <h1 class="text-2xl font-bold mb-4">Chat Room</h1>
     <div id="messages" class="h-64 overflow-y-auto mb-4">
@@ -21,21 +15,16 @@
 <div>
     <button id="connect" type="submit">연결</button>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 <script th:inline="javascript">
     function connect() {
       var socket = new SockJS("http://localhost:8088/ws-stomp");
       stompClient = Stomp.over(socket);
       console.log('hi');
-
-      /*[[${ownerUser.id}]]*/null;
-
       stompClient.connect({}, function (frame) {
       console.log('connect');
+      const aa = /*[[${chatroom.id}]]*/null;
           //구독
-          stompClient.subscribe('/sub/talk//[[${friendUser.id}]]', function (chatMessage) {
+          stompClient.subscribe('/sub/talk/' + aa, function (chatMessage) {
               showChat(JSON.parse(chatMessage.body));
           });
       });
@@ -45,29 +34,25 @@
 
 //html 에서 입력값, roomId 를 받아서 Controller 로 전달
  function sendChat() {
+ const aa = /*[[${chatroom.id}]]*/null;
+
      if ($("#message").val() != "") {
-         stompClient.send("/pub/talk/[[${ownerUser.id}]]/[[${friendUser.id}]]", {},
+         stompClient.send("/pub/talk/" + aa, {},
              JSON.stringify({
                  'roomId' : '',
-                 'sender' : [[${ownerUser.username}]],
+                 'sender' : '',
                  'message' : $("#message").val(),
-                 'ChatRoom' : {chatroom}
+                 'ChatRoom' : {}
              }));
-         $("#message").val('');
            showChat({'message': $("#message").val()});
+           $("#message").val('');
      }
  }
 
     function showChat(chatMessage) {
         $("#greetings").append(
-        if(chatMessage.sender != /*[[${authentication.username}]]*/{
-            "<div class = 'chatting_own'><tr><td>" + chatMessage.sender + "</td></tr></div>"
-            "<div class = 'chatting_own'><tr><td>" + chatMessage.message + "</td></tr></div>"
-         }else{
           "<div class = 'chatting_own'><tr><td>" + chatMessage.message + "</td></tr></div>"
-         }
         );
-
 }
 
         $(function () {
@@ -78,7 +63,7 @@
  document.addEventListener('DOMContentLoaded', function() {
     connect();
  });
-
 </script>
-</body>
+</div>
+</div>
 </html>
