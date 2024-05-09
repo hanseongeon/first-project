@@ -53,11 +53,6 @@ public class WebSocKetController {
     return message;
   }
 
-//    @MessageMapping("/talk")
-//    @SendTo("/sub/talk")
-//    public ChatMessage message(ChatMessage message) throws Exception{
-//
-//        return message;
-//    }
+
 
 }

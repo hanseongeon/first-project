@@ -1,5 +1,7 @@
 package com.example.first_project.websocket;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +25,7 @@ public class ChatMessage {
 
 
     @ManyToOne
+    @JsonBackReference
     private ChatRoom chatRoom;
 
     public ChatMessage(String message){this.message = message;}
