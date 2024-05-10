@@ -25,7 +25,7 @@ public class ChatMessage {
 
     private String message; // 메시지
 
-    @DateTimeFormat(pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;
 
     @ManyToOne
