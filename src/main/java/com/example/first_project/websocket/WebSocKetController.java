@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,33 +23,11 @@ public class WebSocKetController {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-  @GetMapping("/chat/list")
-    public String list(Model model){
-      List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
-      model.addAttribute("chatroomList",chatRoomList);
-
-
-      return "chatList";
-  }
-
-  @GetMapping("/chat/create")
-    public String create(){
-//      ChatRoom chatRoom = new ChatRoom();
-//      chatRoomRepository.save(chatRoom);
-
-      return "redirect:/chat/list";
-  }
-
-  @GetMapping("/chat/talk")
-    public String talk(){
-
-      return "chatroom";
-  }
-
   @MessageMapping("/talk/{id}")
   @SendTo("/sub/talk/{id}")
   public ChatMessage message(ChatMessage message) throws Exception{
-      ChatMessage chatMessage = ChatMessage.builder().sender(message.getSender()).message(message.getMessage()).chatRoom(message.getChatRoom()).build();
+      LocalDateTime createDate = message.getCreateDate();
+      ChatMessage chatMessage = ChatMessage.builder().sender(message.getSender()).message(message.getMessage()).chatRoom(message.getChatRoom()).createDate(createDate).build();
       chatMessageRepository.save(chatMessage);
     return message;
   }
