@@ -1,5 +1,8 @@
 package com.example.first_project.user;
 
+import com.example.first_project.alarm.Alarm;
+import com.example.first_project.alarm.AlarmRepository;
+import com.example.first_project.alarm.AlarmService;
 import com.example.first_project.email.EmailService;
 import com.example.first_project.friendship.Friendship;
 import com.example.first_project.friendship.FriendshipService;
@@ -26,6 +29,8 @@ public class UserController {
     private final FriendshipService friendshipService;
     private final EmailService emailService;
     private final ChatRoomService chatRoomService;
+    private final AlarmRepository alarmRepository;
+    private final AlarmService alarmService;
     @Value("${temp.password.length}")
     private int tempPasswordLength;
 
@@ -73,11 +78,13 @@ public class UserController {
         List<Friendship> friendRequest = this.friendshipService.getRequest(siteUser.getId());
         List<Friendship> acceptFriendList = this.friendshipService.getAccept(siteUser.getId());
         List<Friendship> friendshipList = this.friendshipService.getFriendshipList(siteUser.getId());
+        List<Alarm> alarmList = this.alarmRepository.findByAcceptUser(siteUser);
 
         model.addAttribute("user", siteUser);
         model.addAttribute("friendRequest", friendRequest);
         model.addAttribute("acceptFriend", acceptFriendList);
         model.addAttribute("friendshipList", friendshipList);
+        model.addAttribute("alarmList",alarmList);
 
         return "main_page";
     }
@@ -165,5 +172,22 @@ public class UserController {
         return "chatroom";
     }
 
+    @GetMapping("/alarmCheck/{chatRoomId}")
+    public String alarmCheck(@PathVariable("chatRoomId") Long chatRoomId,@AuthenticationPrincipal UserDetail userDetail){
+        SiteUser siteUser = userService.getUser(userDetail.getUsername());
+        ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
+        List<Alarm> alarmList = alarmService.findByChatRoomId(chatRoomId);
+        for(Alarm alarm : alarmList){
+            if(alarm.getAcceptUser() == siteUser) {
+                alarm.setAccept(true);
+                alarmRepository.save(alarm);
+            }
+        }
 
+        if(siteUser != chatRoom.getUser()){
+            return "redirect:/user/talk/%d".formatted(siteUser.getId());
+        }else{
+            return "redirect:/user/talk/%d".formatted(chatRoom.getUser2().getId());
+        }
+    }
 }

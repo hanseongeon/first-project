@@ -64,8 +64,8 @@
                 stompClient.subscribe('/sub/talk/' + aa, function (chatMessageDto) {
                     showChat(JSON.parse(chatMessageDto.body));
                 });
-                stompClient.subscribe('/sub/alarm/' + friendUser, function (chatMessageDto) {
-                    showChat(JSON.parse(chatMessage.body));
+                stompClient.subscribe('/sub/alarm/' + friendUser, function (alarmDto) {
+
                 });
             });
         }
@@ -75,6 +75,8 @@
         function sendChat() {
             const aa = /*[[${chatroom.id}]]*/;
             const sender = /*[[${ownerUser.nickname}]]*/;
+            const friendUser = [[${friendUser.username}]];
+            const acceptUser = [[${friendUser.nickname}]];
 
             var currentDate = new Date();
             currentDate.setTime(currentDate.getTime() + (9 * 60 * 60 * 1000));
@@ -87,8 +89,17 @@
                         'message': $("#message").val(),
                         'createDate': formattedDate
                     }));
-                $("#message").val('');
             }
+
+            stompClient.send("/pub/alarm/" +friendUser, {},
+                JSON.stringify({
+                    'message' : $("#message").val(),
+                    'accept' : 'false',
+                    'sendUsername' : sender,
+                    'acceptUsername' : acceptUser,
+                    'chatRoomId' : aa
+                }));
+                $("#message").val('');
         }
 
         function showChat(chatMessageDto) {
