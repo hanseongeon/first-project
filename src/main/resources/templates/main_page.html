@@ -93,6 +93,23 @@
                     </p>
                 </div>
             </details>
+            <details class="collapse bg-base-200">
+                <summary class="collapse-title text-xl font-medium"><i class="fa-regular fa-bell"></i></summary>
+                <div class="collapse-content">
+                    <p>
+                    <div class="friend-request">
+                        <div th:if="${friendshipList != null}">
+                            <ul>
+                                <li th:each="list : ${friendshipList}">
+                                    <a th:href="@{|/user/talk/${user.id == list.friend2.id ? list.friend1.id : list.friend2.id}|}"
+                                       th:text="${list.friend2.nickname ==  user.nickname ? list.friend1.nickname : list.friend2.nickname}"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    </p>
+                </div>
+            </details>
         </div>
     </div>
 </div>

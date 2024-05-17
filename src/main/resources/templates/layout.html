@@ -46,6 +46,8 @@
  function connectIfLoggedIn() {
      var loggedInUser = getLoggedInUser();
      if (loggedInUser != null) {
+         console.log('로그인된 아이디는' + loggedInUser);
+
          connectWebSocket(loggedInUser);
      } else {
          console.log('로그인되지 않은 상태입니다.');
@@ -58,8 +60,9 @@
      var stompClient = Stomp.over(socket);
      stompClient.connect({}, function (frame) {
          console.log('웹소켓 연결 성공:', frame);
+         var user = getLoggedInUser();
          // 연결 후 추가 작업 수행
-         stompClient.subscribe('/sub/talk', function (chatMessage) {
+         stompClient.subscribe('/sub/alarm/' + user , function (chatMessage) {
              console.log('받은 메시지:', chatMessage);
          });
      }, function (error) {
