@@ -4,6 +4,7 @@ import com.example.first_project.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,5 +17,9 @@ private final ChatRoomRepository chatRoomRepository;
 
     public ChatRoom save(ChatRoom chatRoom){
         return this.chatRoomRepository.save(chatRoom);
+    }
+
+    public ChatRoom findById(Long id){
+        return chatRoomRepository.findById(id);
     }
 }

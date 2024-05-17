@@ -22,6 +22,8 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public static final QChatRoom chatRoom = new QChatRoom("chatRoom");
 
+    public final ListPath<com.example.first_project.alarm.Alarm, com.example.first_project.alarm.QAlarm> alarmList = this.<com.example.first_project.alarm.Alarm, com.example.first_project.alarm.QAlarm>createList("alarmList", com.example.first_project.alarm.Alarm.class, com.example.first_project.alarm.QAlarm.class, PathInits.DIRECT2);
+
     public final ListPath<ChatMessage, QChatMessage> chatMessageList = this.<ChatMessage, QChatMessage>createList("chatMessageList", ChatMessage.class, QChatMessage.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
