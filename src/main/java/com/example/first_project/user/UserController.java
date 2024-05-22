@@ -185,7 +185,7 @@ public class UserController {
         }
 
         if(siteUser != chatRoom.getUser()){
-            return "redirect:/user/talk/%d".formatted(siteUser.getId());
+            return "redirect:/user/talk/%d".formatted(chatRoom.getUser().getId());
         }else{
             return "redirect:/user/talk/%d".formatted(chatRoom.getUser2().getId());
         }
