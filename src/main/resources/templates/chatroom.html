@@ -45,12 +45,20 @@
         </div>
         <input id="message" type="text" class="border border-gray-300 rounded-lg p-2 w-full mb-4"
                placeholder="Type your message...">
+        <div class="flex gap-5">
         <button id="sendButton" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg">Send</button>
+        <i class="fa-regular fa-image fa-xl" id="img">
+            <input type="file" id="file" style="display: none;">
+        </i>
+        </div>
     </div>
     <div>
         <button class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg">
             <a th:href="@{/user/main}">나가기</a>
         </button>
+    </div>
+    <div>
+        <div id="images">이미지들</div>
     </div>
     <script th:inline="javascript">
         function connect() {
@@ -65,7 +73,11 @@
                     showChat(JSON.parse(chatMessageDto.body));
                 });
                 stompClient.subscribe('/sub/alarm/' + friendUser, function (alarmDto) {
-
+                });
+                stompClient.subscribe('/sub/img',function (img){
+                    const base64Image = img.body;
+                    const imageUrl = "data:image/jpeg;base64," + base64Image;
+                    showImage(imageUrl);
                 });
             });
         }
@@ -136,6 +148,57 @@
             // 스크롤을 아래로 이동시킵니다.
          messageContainer.scrollTop = messageContainer.scrollHeight;
         });
+
+        //이미지 아이콘 클릭시 이미지 받아옴
+        const img = document.getElementById('img');
+        img.addEventListener('click',() => {
+             document.getElementById('file').click();
+        });
+         const fileInput = document.getElementById('file');
+            fileInput.addEventListener('change', sendImage);
+
+        //이미지 전송
+        function sendImage() {
+            var input = document.getElementById('file');
+            var file = input.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var arrayBuffer = event.target.result;
+                    var base64String = arrayBufferToBase64(arrayBuffer);
+                    console.log("============================>");
+                    console.log(arrayBuffer);
+                    console.log(base64String);
+                    stompClient.send("/pub/img", {}, base64String);
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                console.log("No file selected");
+            }
+        }
+
+        function arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+
+        // 예제 사용법
+
+
+        //이미지 보여주기
+function showImage(imageSrc) {
+    var imgWrapper = document.createElement('div'); // 이미지를 감싸는 div 요소를 생성합니다.
+    var imgElement = document.createElement('img');
+    imgElement.src = imageSrc;
+    imgWrapper.appendChild(imgElement); //이미지를 감싸는 div 안에 이미지를 추가합니다.
+    document.getElementById('images').appendChild(imgWrapper); //images div에 추가합니다.
+}
     </script>
 </div>
 </body>
