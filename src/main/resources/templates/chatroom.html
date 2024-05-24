@@ -25,28 +25,38 @@
             <div>
                 <div th:each="list :${chatroom.chatMessageList}">
                     <div th:if="${list.sender == ownerUser.username}">
-                        <div class="chat chat-end">
-                            <span class="chat-header" th:text="${list.sender}"></span>
-                            <time class="text-xs opacity-50" th:text="${list.createDate}"></time>
-                            <div class="chat-bubble" th:text="${list.message}"></div>
+                        <div class="chat chat-end flex flex-col items-end">
+                            <div class="flex items-center">
+                                <div class="chat-header" >
+                                    [[${list.sender}]]
+                                    <time class="text-xs opacity-50" th:text="${list.createDate}"></time>
+                                </div>
+                            </div>
+                            <div class="chat-bubble mr-2" th:text="${list.message}"></div>
                         </div>
                     </div>
                     <div th:if="${list.sender != ownerUser.username}">
-                        <div class="chat chat-start">
-                            <span class="chat-header" th:text="${list.sender}"></span>
-                            <time class="text-xs opacity-50" th:text="${list.createDate}"></time>
-                            <div class="chat-bubble" th:text="${list.message}"></div>
+                        <div class="chat chat-start flex flex-col items-start">
+                            <div class="flex">
+                                <div class="chat-header">
+                                    [[${list.sender}]]
+                                    <time class="text-xs opacity-50" th:text="${list.createDate}"></time>
+                                </div>
+                            </div>
+                            <div class="chat-bubble ml-2" th:text="${list.message}"></div>
                         </div>
                     </div>
                 </div>
-                <div id="greetings"></div>
+                <div id="greetings">
+
+                </div>
             </div>
 
         </div>
         <input id="message" type="text" class="border border-gray-300 rounded-lg p-2 w-full mb-4"
-               placeholder="Type your message...">
+               placeholder="Type your message..."/>
         <div class="flex gap-5">
-        <button id="sendButton" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg">Send</button>
+        <button id="sendButton" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg" onclick="sendChat()">Send</button>
         <i class="fa-regular fa-image fa-xl" id="img">
             <input type="file" id="file" style="display: none;">
         </i>
@@ -116,11 +126,11 @@
             const sender = /*[[${ownerUser.nickname}]]*/;
             if (chatMessageDto.sender == sender) {
                 $("#greetings").append(
-                    "<div class = 'chat chat-end'><div class = 'chat-header'>" + chatMessageDto.sender + " <time class='text-xs opacity-50'>" + chatMessageDto.createDate + "</time></div><div class = 'chat-bubble'>" + chatMessageDto.message + "</div></div>"
+                    "<div class = 'chat chat-end  flex flex-col items-end'><div class = 'chat-header'>" + chatMessageDto.sender + " <time class='text-xs opacity-50'>" + chatMessageDto.createDate + "</time></div><div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div></div>"
                 );
             } else {
                 $("#greetings").append(
-                    "<div class = 'chat chat-start'><div class = 'chat-header'>" + chatMessageDto.sender + " <time class='text-xs opacity-50'>" + chatMessageDto.createDate + "</time></div><div class = 'chat-bubble'>" + chatMessageDto.message + "</div></div>"
+                    "<div class = 'chat chat-start flex flex-col items-start'><div class = 'chat-header'>" + chatMessageDto.sender + " <time class='text-xs opacity-50'>" + chatMessageDto.createDate + "</time></div><div class = 'chat-bubble ml-2'>" + chatMessageDto.message + "</div></div>"
                 );
             }
               var messageContainer = document.getElementById("messages");

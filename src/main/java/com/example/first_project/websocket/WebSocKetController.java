@@ -6,6 +6,7 @@ import com.example.first_project.alarm.AlarmRepository;
 import com.example.first_project.user.SiteUser;
 import com.example.first_project.user.UserRepository;
 import com.example.first_project.user.UserService;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.io.FileUtils;
@@ -19,9 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -56,9 +55,23 @@ public class WebSocKetController {
 
     @MessageMapping("/img")
     @SendTo("/sub/img")
-    public String sendImg(@RequestBody String image){
+    public String sendImg(@RequestBody String image)  {
+        try {
+            byte[] bytes= Base64.decodeBase64(image.split("\":\"")[1].split("\",\"index")[0]);
+            String name = UUID.randomUUID().toString();
+            
+            File file = new File("c:/web/"+name+".png"); // 파일 이름 변경, 경로지정
+            if(!file.getParentFile().exists()) // 경로 폴더 체크
+                file.getParentFile().mkdirs(); // 폴더 생성
+            if(!file.exists()) // 파일 체크
+                file.createNewFile(); // 파일 생성
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bytes);
+            fos.close();
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
 
-
-      return image;
+        return image;
     }
 }
