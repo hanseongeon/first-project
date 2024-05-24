@@ -3,6 +3,7 @@ package com.example.first_project.websocket;
 import com.example.first_project.alarm.Alarm;
 import com.example.first_project.alarm.AlarmDto;
 import com.example.first_project.alarm.AlarmRepository;
+import com.example.first_project.image.ImageDto;
 import com.example.first_project.user.SiteUser;
 import com.example.first_project.user.UserRepository;
 import com.example.first_project.user.UserService;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -32,6 +35,7 @@ public class WebSocKetController {
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
+    List<String> imgList = new ArrayList<>();
   @MessageMapping("/talk/{id}")
   @SendTo("/sub/talk/{id}")
   public ChatMessageDto message(ChatMessageDto message, @DestinationVariable("id") Long id) throws Exception{
@@ -59,7 +63,7 @@ public class WebSocKetController {
         try {
             byte[] bytes= Base64.decodeBase64(image.split("\":\"")[1].split("\",\"index")[0]);
             String name = UUID.randomUUID().toString();
-            
+
             File file = new File("c:/web/"+name+".png"); // 파일 이름 변경, 경로지정
             if(!file.getParentFile().exists()) // 경로 폴더 체크
                 file.getParentFile().mkdirs(); // 폴더 생성

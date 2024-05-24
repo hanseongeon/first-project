@@ -198,10 +198,13 @@
             // 분할파일 전송
            function sendBase64InChunks(base64String, chunkSize) {
             var totalChunks = Math.ceil(base64String.length / chunkSize);
-
+            let complete = false;
             for (var i = 0; i < totalChunks; i++) {
+                if( i == totalChunks - 1) {
+                    complete = true;
+                }
                 var chunk = base64String.slice(i * chunkSize, (i + 1) * chunkSize);
-                stompClient.send("/pub/img", {}, JSON.stringify({ chunk: chunk, index: i, total: totalChunks }));
+                stompClient.send("/pub/img", {}, JSON.stringify({ chunk: chunk, index: i, total: totalChunks}));
             }
         }
 
@@ -224,18 +227,28 @@ function showImage(imageSrc) {
     document.getElementById('images').appendChild(imgWrapper);
 }
 
-        let receivedImageData = ''; // 이미지 데이터를 임시로 저장할 변수
-
+let receivedImageData = ''; // 이미지 데이터를 임시로 저장할 변수
+let tmpArr = [];
+let receivedChunkCnt = 0;
 // 이미지 데이터를 받아서 합치고 이미지로 표시하는 함수
 function showImageChunks(chunkData) {
-    const chunk = JSON.parse(chunkData.body); // 청크 데이터 파싱
-    receivedImageData += chunk.chunk; // 받은 청크를 임시 변수에 추가
 
-    if (chunk.index === chunk.total - 1) { // 모든 청크를 받았는지 확인
+    const chunk = JSON.parse(chunkData.body); // 청크 데이터 파싱
+    tmpArr[chunk.index] = chunk;
+    receivedChunkCnt++;
+    console.log(chunk.total);
+    if (receivedChunkCnt === chunk.total) { // 모든 청크를 받았는지 확인
         // 모든 청크를 받았다면
+        let chuckedResult = "";
+        tmpArr.forEach((tmp) => {
+            console.log(tmp.index);
+            receivedImageData += tmp.chunk;
+        });
         const imageUrl = "data:image/jpeg;base64," + receivedImageData; // 합친 이미지 데이터를 Base64 형식으로 변환
         showImage(imageUrl); // 이미지로 표시
         receivedImageData = ''; // 임시 변수 초기화
+        tmpArr = [];
+        receivedChunkCnt = 0;
     }
 }
     </script>
