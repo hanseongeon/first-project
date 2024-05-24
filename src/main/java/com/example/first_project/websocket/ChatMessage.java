@@ -25,6 +25,8 @@ public class ChatMessage {
 
     private String message; // 메시지
 
+    private String imgUrl;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;
 

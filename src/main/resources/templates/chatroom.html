@@ -75,9 +75,7 @@
                 stompClient.subscribe('/sub/alarm/' + friendUser, function (alarmDto) {
                 });
                 stompClient.subscribe('/sub/img',function (img){
-                    const base64Image = img.body;
-                    const imageUrl = "data:image/jpeg;base64," + base64Image;
-                    showImage(imageUrl);
+                  showImageChunks(img);
                 });
             });
         }
@@ -170,7 +168,7 @@
                     console.log("============================>");
                     console.log(arrayBuffer);
                     console.log(base64String);
-                    stompClient.send("/pub/img", {}, base64String);
+                    sendBase64InChunks(base64String, 60000); // 6KB로 분할하여 전송
                 };
                 reader.readAsArrayBuffer(file);
             } else {
@@ -178,14 +176,23 @@
             }
         }
 
-        function arrayBufferToBase64(buffer) {
+          function arrayBufferToBase64(buffer) {
             var binary = '';
             var bytes = new Uint8Array(buffer);
             var len = bytes.byteLength;
             for (var i = 0; i < len; i++) {
                 binary += String.fromCharCode(bytes[i]);
             }
-            return btoa(binary);
+            return window.btoa(binary);
+        }
+
+           function sendBase64InChunks(base64String, chunkSize) {
+            var totalChunks = Math.ceil(base64String.length / chunkSize);
+
+            for (var i = 0; i < totalChunks; i++) {
+                var chunk = base64String.slice(i * chunkSize, (i + 1) * chunkSize);
+                stompClient.send("/pub/img", {}, JSON.stringify({ chunk: chunk, index: i, total: totalChunks }));
+            }
         }
 
         // 예제 사용법
@@ -198,6 +205,21 @@ function showImage(imageSrc) {
     imgElement.src = imageSrc;
     imgWrapper.appendChild(imgElement); //이미지를 감싸는 div 안에 이미지를 추가합니다.
     document.getElementById('images').appendChild(imgWrapper); //images div에 추가합니다.
+}
+
+        let receivedImageData = ''; // 이미지 데이터를 임시로 저장할 변수
+
+// 이미지 데이터를 받아서 합치고 이미지로 표시하는 함수
+function showImageChunks(chunkData) {
+    const chunk = JSON.parse(chunkData.body); // 청크 데이터 파싱
+    receivedImageData += chunk.chunk; // 받은 청크를 임시 변수에 추가
+
+    if (chunk.index === chunk.total - 1) { // 모든 청크를 받았는지 확인
+        // 모든 청크를 받았다면
+        const imageUrl = "data:image/jpeg;base64," + receivedImageData; // 합친 이미지 데이터를 Base64 형식으로 변환
+        showImage(imageUrl); // 이미지로 표시
+        receivedImageData = ''; // 임시 변수 초기화
+    }
 }
     </script>
 </div>
