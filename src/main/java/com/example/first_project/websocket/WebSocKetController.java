@@ -61,12 +61,19 @@ public class WebSocKetController {
     @MessageMapping("/img")
     @SendTo("/sub/img")
     public String sendImg(ImageDto image) {
+        System.out.println("토탈: "+image.getTotal());
+        System.out.println("넘어온 인덱스: "+image.getIndex());
+        System.out.println("맵 사이즈: "+imageChunksMap.size());
         try {
             imageChunksMap.put(image.getIndex(), image.getChunk());
+            System.out.println(imageChunksMap.size());
+            System.out.println(image.getTotal());
             if (imageChunksMap.size() == image.getTotal()) {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 for (int i = 0; i < imageChunksMap.size(); i++) {
-                    byte[] bytes = Base64.decodeBase64(imageChunksMap.get(i).split("\":\"")[1].split("\",\"index")[0]);
+//                    System.out.println(imageChunksMap.get(i));
+
+                    byte[] bytes = Base64.decodeBase64(imageChunksMap.get(i));
                     byteArrayOutputStream.write(bytes);
                 }
                 byte[] completeImageBytes = byteArrayOutputStream.toByteArray(); // 모든 청크를 합친 완전한 이미지 바이너리 배열
@@ -82,7 +89,7 @@ public class WebSocKetController {
                 fos.write(completeImageBytes);
                 fos.close();
                 imageChunksMap.clear();
-                return file.getParent();
+                return "/images/" + file.getName();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

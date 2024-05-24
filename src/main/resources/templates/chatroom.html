@@ -85,8 +85,10 @@
                 stompClient.subscribe('/sub/alarm/' + friendUser, function (alarmDto) {
                 });
                 stompClient.subscribe('/sub/img',function (img){
-                    if(!img === 'ing'){
-                        showImage(img);
+                    console.log("dsfsdfsdfs");
+                    console.log(img);
+                    if(!(img.body === 'ing')){
+                        showImage(img.body);
                      }
                 });
             });
@@ -215,6 +217,7 @@
 
         //이미지 보여주기
 function showImage(imageSrc) {
+console.log(imageSrc);
     var imgWrapper = document.createElement('div');
     imgWrapper.style.width = '100px'; // 너비를 100px로 설정
     imgWrapper.style.height = '100px'; // 높이를 100px로 설정
@@ -224,6 +227,7 @@ function showImage(imageSrc) {
     imgElement.style.width = '100%'; // 이미지가 부모 요소의 너비를 채우도록 설정
     imgElement.style.height = '100%'; // 이미지가 부모 요소의 높이를 채우도록 설정
     imgElement.style.objectFit = 'cover'; // 이미지가 잘리지 않고 부모 요소에 맞게 조정되도록 설정
+    console.log(imgElement);
 
     imgWrapper.appendChild(imgElement);
     document.getElementById('images').appendChild(imgWrapper);
