@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,20 +33,23 @@ public class WebSocKetController {
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
-    List<String> imgList = new ArrayList<>();
-  @MessageMapping("/talk/{id}")
-  @SendTo("/sub/talk/{id}")
-  public ChatMessageDto message(ChatMessageDto message, @DestinationVariable("id") Long id) throws Exception{
-      LocalDateTime createDate = message.getCreateDate();
-      ChatRoom chatRoom = chatRoomRepository.findById(id);
-      ChatMessage chatMessage = ChatMessage.builder().sender(message.getSender()).message(message.getMessage()).chatRoom(chatRoom).createDate(createDate).build();
-      chatMessageRepository.save(chatMessage);
-    return message;
-  }
+    private Map<Integer, String> imageChunksMap = new HashMap<>();
+    private Long url;
+    private String urltoint;
+
+    @MessageMapping("/talk/{id}")
+    @SendTo("/sub/talk/{id}")
+    public ChatMessageDto message(ChatMessageDto message, @DestinationVariable("id") Long id) throws Exception {
+        LocalDateTime createDate = message.getCreateDate();
+        ChatRoom chatRoom = chatRoomRepository.findById(id);
+        ChatMessage chatMessage = ChatMessage.builder().sender(message.getSender()).message(message.getMessage()).chatRoom(chatRoom).createDate(createDate).build();
+        chatMessageRepository.save(chatMessage);
+        return message;
+    }
 
     @MessageMapping("/alarm/{username}")
     @SendTo("/sub/alarm/{username}")
-    public AlarmDto alarm(AlarmDto alarm) throws Exception{
+    public AlarmDto alarm(AlarmDto alarm) throws Exception {
         SiteUser sendUser = userRepository.findByNickname(alarm.getSendUsername()).orElseThrow();
         SiteUser acceptUser = userRepository.findByNickname(alarm.getAcceptUsername()).orElseThrow();
         ChatRoom chatRoom = chatRoomRepository.findById(alarm.getChatRoomId());
@@ -59,23 +60,34 @@ public class WebSocKetController {
 
     @MessageMapping("/img")
     @SendTo("/sub/img")
-    public String sendImg(@RequestBody String image)  {
+    public String sendImg(ImageDto image) {
         try {
-            byte[] bytes= Base64.decodeBase64(image.split("\":\"")[1].split("\",\"index")[0]);
-            String name = UUID.randomUUID().toString();
+            imageChunksMap.put(image.getIndex(), image.getChunk());
+            if (imageChunksMap.size() == image.getTotal()) {
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                for (int i = 0; i < imageChunksMap.size(); i++) {
+                    byte[] bytes = Base64.decodeBase64(imageChunksMap.get(i).split("\":\"")[1].split("\",\"index")[0]);
+                    byteArrayOutputStream.write(bytes);
+                }
+                byte[] completeImageBytes = byteArrayOutputStream.toByteArray(); // 모든 청크를 합친 완전한 이미지 바이너리 배열
 
-            File file = new File("c:/web/"+name+".png"); // 파일 이름 변경, 경로지정
-            if(!file.getParentFile().exists()) // 경로 폴더 체크
-                file.getParentFile().mkdirs(); // 폴더 생성
-            if(!file.exists()) // 파일 체크
-                file.createNewFile(); // 파일 생성
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bytes);
-            fos.close();
-        } catch (IOException e){
+                String name = UUID.randomUUID().toString();
+
+                File file = new File("c:/web/" + name + ".png"); // 파일 이름 변경, 경로지정
+                if (!file.getParentFile().exists()) // 경로 폴더 체크
+                    file.getParentFile().mkdirs(); // 폴더 생성
+                if (!file.exists()) // 파일 체크
+                    file.createNewFile(); // 파일 생성
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(completeImageBytes);
+                fos.close();
+                imageChunksMap.clear();
+                return file.getParent();
+            }
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return image;
+        return "ing";
     }
 }

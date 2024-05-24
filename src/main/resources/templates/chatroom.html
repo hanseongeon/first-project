@@ -85,7 +85,9 @@
                 stompClient.subscribe('/sub/alarm/' + friendUser, function (alarmDto) {
                 });
                 stompClient.subscribe('/sub/img',function (img){
-                  showImageChunks(img);
+                    if(!img === 'ing'){
+                        showImage(img);
+                     }
                 });
             });
         }
@@ -227,30 +229,50 @@ function showImage(imageSrc) {
     document.getElementById('images').appendChild(imgWrapper);
 }
 
-let receivedImageData = ''; // 이미지 데이터를 임시로 저장할 변수
-let tmpArr = [];
-let receivedChunkCnt = 0;
-// 이미지 데이터를 받아서 합치고 이미지로 표시하는 함수
-function showImageChunks(chunkData) {
+    </script>
 
-    const chunk = JSON.parse(chunkData.body); // 청크 데이터 파싱
-    tmpArr[chunk.index] = chunk;
-    receivedChunkCnt++;
-    console.log(chunk.total);
-    if (receivedChunkCnt === chunk.total) { // 모든 청크를 받았는지 확인
-        // 모든 청크를 받았다면
-        let chuckedResult = "";
-        tmpArr.forEach((tmp) => {
-            console.log(tmp.index);
-            receivedImageData += tmp.chunk;
-        });
-        const imageUrl = "data:image/jpeg;base64," + receivedImageData; // 합친 이미지 데이터를 Base64 형식으로 변환
-        showImage(imageUrl); // 이미지로 표시
-        receivedImageData = ''; // 임시 변수 초기화
-        tmpArr = [];
-        receivedChunkCnt = 0;
-    }
-}
+    <script>
+        // 분할로 넘겨준 이미지 파일 다시 합쳐서 보여주는 코드 이제는 안쓰지만 만든게 아쉬워서 지우고 싶지않아... 우린 평생 함께 가는거야
+        //이미지 보여주기
+<!--function showImage(imageSrc) {-->
+<!--var imgWrapper = document.createElement('div');-->
+<!--imgWrapper.style.width = '100px'; // 너비를 100px로 설정-->
+<!--imgWrapper.style.height = '100px'; // 높이를 100px로 설정-->
+
+<!--var imgElement = document.createElement('img');-->
+<!--imgElement.src = imageSrc;-->
+<!--imgElement.style.width = '100%'; // 이미지가 부모 요소의 너비를 채우도록 설정-->
+<!--imgElement.style.height = '100%'; // 이미지가 부모 요소의 높이를 채우도록 설정-->
+<!--imgElement.style.objectFit = 'cover'; // 이미지가 잘리지 않고 부모 요소에 맞게 조정되도록 설정-->
+
+<!--imgWrapper.appendChild(imgElement);-->
+<!--document.getElementById('images').appendChild(imgWrapper);-->
+<!--}-->
+
+<!--let receivedImageData = ''; // 이미지 데이터를 임시로 저장할 변수-->
+<!--let tmpArr = [];-->
+<!--let receivedChunkCnt = 0;-->
+<!--// 이미지 데이터를 받아서 합치고 이미지로 표시하는 함수-->
+<!--function showImageChunks(chunkData) {-->
+
+<!--const chunk = JSON.parse(chunkData.body); // 청크 데이터 파싱-->
+<!--tmpArr[chunk.index] = chunk;-->
+<!--receivedChunkCnt++;-->
+<!--console.log(chunk.total);-->
+<!--if (receivedChunkCnt === chunk.total) { // 모든 청크를 받았는지 확인-->
+<!-- // 모든 청크를 받았다면-->
+<!-- let chuckedResult = "";-->
+<!-- tmpArr.forEach((tmp) => {-->
+<!--     console.log(tmp.index);-->
+<!--     receivedImageData += tmp.chunk;-->
+<!-- });-->
+<!-- const imageUrl = "data:image/jpeg;base64," + receivedImageData; // 합친 이미지 데이터를 Base64 형식으로 변환-->
+<!-- showImage(imageUrl); // 이미지로 표시-->
+<!-- receivedImageData = ''; // 임시 변수 초기화-->
+<!-- tmpArr = [];-->
+<!-- receivedChunkCnt = 0;-->
+<!--}-->
+<!--}-->
     </script>
 </div>
 </body>
