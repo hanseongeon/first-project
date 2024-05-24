@@ -175,7 +175,7 @@
                 console.log("No file selected");
             }
         }
-
+        //base64 로 인코딩
           function arrayBufferToBase64(buffer) {
             var binary = '';
             var bytes = new Uint8Array(buffer);
@@ -185,7 +185,7 @@
             }
             return window.btoa(binary);
         }
-
+            // 분할파일 전송
            function sendBase64InChunks(base64String, chunkSize) {
             var totalChunks = Math.ceil(base64String.length / chunkSize);
 
@@ -195,16 +195,23 @@
             }
         }
 
-        // 예제 사용법
+
 
 
         //이미지 보여주기
 function showImage(imageSrc) {
-    var imgWrapper = document.createElement('div'); // 이미지를 감싸는 div 요소를 생성합니다.
+    var imgWrapper = document.createElement('div');
+    imgWrapper.style.width = '100px'; // 너비를 100px로 설정
+    imgWrapper.style.height = '100px'; // 높이를 100px로 설정
+
     var imgElement = document.createElement('img');
     imgElement.src = imageSrc;
-    imgWrapper.appendChild(imgElement); //이미지를 감싸는 div 안에 이미지를 추가합니다.
-    document.getElementById('images').appendChild(imgWrapper); //images div에 추가합니다.
+    imgElement.style.width = '100%'; // 이미지가 부모 요소의 너비를 채우도록 설정
+    imgElement.style.height = '100%'; // 이미지가 부모 요소의 높이를 채우도록 설정
+    imgElement.style.objectFit = 'cover'; // 이미지가 잘리지 않고 부모 요소에 맞게 조정되도록 설정
+
+    imgWrapper.appendChild(imgElement);
+    document.getElementById('images').appendChild(imgWrapper);
 }
 
         let receivedImageData = ''; // 이미지 데이터를 임시로 저장할 변수

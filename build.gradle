@@ -52,6 +52,9 @@ dependencies {
 	implementation 'org.webjars:stomp-websocket:2.3.3'
 	implementation 'org.webjars:jquery:3.6.0'
 
+	//stomp로 들어온 이미지 처리
+	implementation 'commons-io:commons-io:2.11.0' // 또는 최신 버전
+
 
 }
 
