@@ -48,10 +48,9 @@
                     </div>
                 </div>
                 <div id="greetings">
-
+                    <div id="images"></div>
                 </div>
             </div>
-
         </div>
         <input id="message" type="text" class="border border-gray-300 rounded-lg p-2 w-full mb-4"
                placeholder="Type your message..."/>
@@ -60,6 +59,24 @@
         <i class="fa-regular fa-image fa-xl" id="img">
             <input type="file" id="file" style="display: none;">
         </i>
+            <!-- Open the modal using ID.showModal() method -->
+            <button class="btn" onclick="my_modal_5.showModal()">사진첩</button>
+            <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                   <div class="flex flex-col gap-5">
+                       <div th:each="img : ${imgList}" style="width:100px; height: 100px;" class="inline-block">
+                           <img th:src="@{|${img.url}|}" alt="사진" style="width:100% height: 100%">
+                       </div>
+                       <div id="newImg"></div>
+                   </div>
+                    <div class="modal-action">
+                        <form method="dialog">
+                            <!-- if there is a button in form, it will close the modal -->
+                            <button class="btn">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
         </div>
     </div>
     <div>
@@ -67,9 +84,9 @@
             <a th:href="@{/user/main}">나가기</a>
         </button>
     </div>
-    <div>
-        <div id="images">이미지들</div>
-    </div>
+<!--    <div>-->
+<!--        <div id="images">이미지들</div>-->
+<!--    </div>-->
     <script th:inline="javascript">
         function connect() {
             var socket = new SockJS("http://localhost:8088/ws-stomp");
@@ -84,9 +101,7 @@
                 });
                 stompClient.subscribe('/sub/alarm/' + friendUser, function (alarmDto) {
                 });
-                stompClient.subscribe('/sub/img',function (img){
-                    console.log("dsfsdfsdfs");
-                    console.log(img);
+                stompClient.subscribe('/sub/img/'+ aa,function (img){
                     if(!(img.body === 'ing')){
                         showImage(img.body);
                      }
@@ -203,12 +218,27 @@
            function sendBase64InChunks(base64String, chunkSize) {
             var totalChunks = Math.ceil(base64String.length / chunkSize);
             let complete = false;
+            const aa = /*[[${chatroom.id}]]*/;
+            const sender = /*[[${ownerUser.nickname}]]*/;
+            const acceptUser = [[${friendUser.nickname}]];
+             var currentDate = new Date();
+            currentDate.setTime(currentDate.getTime() + (9 * 60 * 60 * 1000));
+           var formattedDate = new Date(currentDate).toISOString(); // ISO 형식으로 변환
+
             for (var i = 0; i < totalChunks; i++) {
                 if( i == totalChunks - 1) {
                     complete = true;
                 }
                 var chunk = base64String.slice(i * chunkSize, (i + 1) * chunkSize);
-                stompClient.send("/pub/img", {}, JSON.stringify({ chunk: chunk, index: i, total: totalChunks}));
+                stompClient.send("/pub/img/"+ aa, {}, JSON.stringify({
+                chunk: chunk,
+                index: i,
+                total: totalChunks,
+                sender : sender,
+                acceptUser : acceptUser,
+                chatroomId : aa,
+                createDate : formattedDate
+                }));
             }
         }
 
@@ -217,26 +247,43 @@
 
         //이미지 보여주기
 function showImage(imageSrc) {
-console.log(imageSrc);
-    var imgWrapper = document.createElement('div');
-    imgWrapper.style.width = '100px'; // 너비를 100px로 설정
-    imgWrapper.style.height = '100px'; // 높이를 100px로 설정
+ console.log(imageSrc);
 
-    var imgElement = document.createElement('img');
-    imgElement.src = imageSrc;
-    imgElement.style.width = '100%'; // 이미지가 부모 요소의 너비를 채우도록 설정
-    imgElement.style.height = '100%'; // 이미지가 부모 요소의 높이를 채우도록 설정
-    imgElement.style.objectFit = 'cover'; // 이미지가 잘리지 않고 부모 요소에 맞게 조정되도록 설정
-    console.log(imgElement);
+    // Create first imgWrapper and imgElement for the 'images' container
+    var imgWrapper1 = document.createElement('div');
+    imgWrapper1.style.width = '100px'; // Set width to 100px
+    imgWrapper1.style.height = '100px'; // Set height to 100px
 
-    imgWrapper.appendChild(imgElement);
-    document.getElementById('images').appendChild(imgWrapper);
+    var imgElement1 = document.createElement('img');
+    imgElement1.src = imageSrc;
+    imgElement1.style.width = '100%'; // Set image width to fill parent
+    imgElement1.style.height = '100%'; // Set image height to fill parent
+    imgElement1.style.objectFit = 'cover'; // Ensure image covers the parent without cutting off
+
+    console.log(imgElement1);
+
+    imgWrapper1.appendChild(imgElement1);
+    document.getElementById('images').appendChild(imgWrapper1);
+
+    // Create second imgWrapper and imgElement for the 'newImg' container
+    var imgWrapper2 = document.createElement('div');
+    imgWrapper2.style.width = '100px'; // Set width to 100px
+    imgWrapper2.style.height = '100px'; // Set height to 100px
+
+    var imgElement2 = document.createElement('img');
+    imgElement2.src = imageSrc;
+    imgElement2.style.width = '100%'; // Set image width to fill parent
+    imgElement2.style.height = '100%'; // Set image height to fill parent
+    imgElement2.style.objectFit = 'cover'; // Ensure image covers the parent without cutting off
+
+    console.log(imgElement2);
+
+    imgWrapper2.appendChild(imgElement2);
+    document.getElementById('newImg').appendChild(imgWrapper2);
 }
-
     </script>
 
     <script>
-        // 분할로 넘겨준 이미지 파일 다시 합쳐서 보여주는 코드 이제는 안쓰지만 만든게 아쉬워서 지우고 싶지않아... 우린 평생 함께 가는거야
         //이미지 보여주기
 <!--function showImage(imageSrc) {-->
 <!--var imgWrapper = document.createElement('div');-->

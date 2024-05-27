@@ -3,7 +3,9 @@ package com.example.first_project.websocket;
 import com.example.first_project.alarm.Alarm;
 import com.example.first_project.alarm.AlarmDto;
 import com.example.first_project.alarm.AlarmRepository;
+import com.example.first_project.image.Image;
 import com.example.first_project.image.ImageDto;
+import com.example.first_project.image.ImageRepository;
 import com.example.first_project.user.SiteUser;
 import com.example.first_project.user.UserRepository;
 import com.example.first_project.user.UserService;
@@ -33,6 +35,7 @@ public class WebSocKetController {
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
+    private final ImageRepository imageRepository;
     private Map<Integer, String> imageChunksMap = new HashMap<>();
     private Long url;
     private String urltoint;
@@ -58,21 +61,14 @@ public class WebSocKetController {
         return alarm;
     }
 
-    @MessageMapping("/img")
-    @SendTo("/sub/img")
+    @MessageMapping("/img/{id}")
+    @SendTo("/sub/img/{id}")
     public String sendImg(ImageDto image) {
-        System.out.println("토탈: "+image.getTotal());
-        System.out.println("넘어온 인덱스: "+image.getIndex());
-        System.out.println("맵 사이즈: "+imageChunksMap.size());
         try {
             imageChunksMap.put(image.getIndex(), image.getChunk());
-            System.out.println(imageChunksMap.size());
-            System.out.println(image.getTotal());
             if (imageChunksMap.size() == image.getTotal()) {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 for (int i = 0; i < imageChunksMap.size(); i++) {
-//                    System.out.println(imageChunksMap.get(i));
-
                     byte[] bytes = Base64.decodeBase64(imageChunksMap.get(i));
                     byteArrayOutputStream.write(bytes);
                 }
@@ -89,6 +85,13 @@ public class WebSocKetController {
                 fos.write(completeImageBytes);
                 fos.close();
                 imageChunksMap.clear();
+
+                ChatRoom chatRoom = chatRoomRepository.findById(image.getChatroomId());
+                Image img = new Image();
+                img.setSender(image.getSender());
+                img.setChatRoom(chatRoom);
+                img.setUrl("/images/" + file.getName());
+                imageRepository.save(img);
                 return "/images/" + file.getName();
             }
         } catch (IOException e) {

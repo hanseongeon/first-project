@@ -6,6 +6,8 @@ import com.example.first_project.alarm.AlarmService;
 import com.example.first_project.email.EmailService;
 import com.example.first_project.friendship.Friendship;
 import com.example.first_project.friendship.FriendshipService;
+import com.example.first_project.image.Image;
+import com.example.first_project.image.ImageService;
 import com.example.first_project.websocket.ChatRoom;
 import com.example.first_project.websocket.ChatRoomService;
 import jakarta.validation.Valid;
@@ -31,6 +33,7 @@ public class UserController {
     private final ChatRoomService chatRoomService;
     private final AlarmRepository alarmRepository;
     private final AlarmService alarmService;
+    private final ImageService imageService;
     @Value("${temp.password.length}")
     private int tempPasswordLength;
 
@@ -168,6 +171,8 @@ public class UserController {
         }
         model.addAttribute("ownerUser",ownerUser);
         model.addAttribute("friendUser",friendUser);
+        List<Image> imgList = imageService.findByChatroom(chatRoom.orElseThrow());
+        model.addAttribute("imgList",imgList);
 
         return "chatroom";
     }
