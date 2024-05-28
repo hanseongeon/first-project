@@ -26,13 +26,13 @@ public class QChatMessage extends EntityPathBase<ChatMessage> {
 
     public final DateTimePath<java.time.LocalDateTime> createDate = createDateTime("createDate", java.time.LocalDateTime.class);
 
-    public final StringPath imgUrl = createString("imgUrl");
+    public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final com.example.first_project.image.QImage image;
 
     public final StringPath message = createString("message");
 
-    public final NumberPath<Long> roomId = createNumber("roomId", Long.class);
-
-    public final StringPath sender = createString("sender");
+    public final com.example.first_project.user.QSiteUser sender;
 
     public QChatMessage(String variable) {
         this(ChatMessage.class, forVariable(variable), INITS);
@@ -53,6 +53,8 @@ public class QChatMessage extends EntityPathBase<ChatMessage> {
     public QChatMessage(Class<? extends ChatMessage> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.chatRoom = inits.isInitialized("chatRoom") ? new QChatRoom(forProperty("chatRoom"), inits.get("chatRoom")) : null;
+        this.image = inits.isInitialized("image") ? new com.example.first_project.image.QImage(forProperty("image"), inits.get("image")) : null;
+        this.sender = inits.isInitialized("sender") ? new com.example.first_project.user.QSiteUser(forProperty("sender")) : null;
     }
 
 }

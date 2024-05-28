@@ -45,7 +45,8 @@ public class WebSocKetController {
     public ChatMessageDto message(ChatMessageDto message, @DestinationVariable("id") Long id) throws Exception {
         LocalDateTime createDate = message.getCreateDate();
         ChatRoom chatRoom = chatRoomRepository.findById(id);
-        ChatMessage chatMessage = ChatMessage.builder().sender(message.getSender()).message(message.getMessage()).chatRoom(chatRoom).createDate(createDate).build();
+        SiteUser siteUser = userService.getUserNickname(message.getSender());
+        ChatMessage chatMessage = ChatMessage.builder().sender(siteUser).message(message.getMessage()).chatRoom(chatRoom).createDate(createDate).build();
         chatMessageRepository.save(chatMessage);
         return message;
     }
@@ -87,11 +88,19 @@ public class WebSocKetController {
                 imageChunksMap.clear();
 
                 ChatRoom chatRoom = chatRoomRepository.findById(image.getChatroomId());
+                SiteUser siteUser = userService.getUserNickname(image.getSender());
                 Image img = new Image();
-                img.setSender(image.getSender());
+                img.setSender(siteUser);
                 img.setChatRoom(chatRoom);
+                img.setCreateDate(image.getCreateDate());
                 img.setUrl("/images/" + file.getName());
                 imageRepository.save(img);
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setImage(img);
+                chatMessage.setSender(siteUser);
+                chatMessage.setChatRoom(chatRoom);
+                chatMessage.setCreateDate(image.getCreateDate());
+                chatMessageRepository.save(chatMessage);
                 return "/images/" + file.getName();
             }
         } catch (IOException e) {

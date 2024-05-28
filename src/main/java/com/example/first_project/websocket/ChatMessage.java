@@ -1,5 +1,7 @@
 package com.example.first_project.websocket;
 
+import com.example.first_project.image.Image;
+import com.example.first_project.user.SiteUser;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -19,13 +21,16 @@ public class ChatMessage {
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId; // 채팅방 번호
+    private Long id; // 채팅방 번호
 
-    private String sender; // 메세지 보낸사람
+    @ManyToOne
+    private SiteUser sender; // 메세지 보낸사람
 
     private String message; // 메시지
 
-    private String imgUrl;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;
@@ -37,7 +42,7 @@ public class ChatMessage {
     public ChatMessage(String message){this.message = message;}
 
     @Builder
-    public ChatMessage(String sender,String message,ChatRoom chatRoom,LocalDateTime createDate){
+    public ChatMessage(SiteUser sender,String message,ChatRoom chatRoom,LocalDateTime createDate){
    this.sender = sender;
    this.message = message;
    this.chatRoom = chatRoom;

@@ -28,7 +28,7 @@ public class QImage extends EntityPathBase<Image> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath sender = createString("sender");
+    public final com.example.first_project.user.QSiteUser sender;
 
     public final StringPath url = createString("url");
 
@@ -51,6 +51,7 @@ public class QImage extends EntityPathBase<Image> {
     public QImage(Class<? extends Image> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.chatRoom = inits.isInitialized("chatRoom") ? new com.example.first_project.websocket.QChatRoom(forProperty("chatRoom"), inits.get("chatRoom")) : null;
+        this.sender = inits.isInitialized("sender") ? new com.example.first_project.user.QSiteUser(forProperty("sender")) : null;
     }
 
 }
