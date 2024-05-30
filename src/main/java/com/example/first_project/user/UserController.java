@@ -61,11 +61,9 @@ public class UserController {
             userService.createUser(userCreateForm.getUsername(),
                     userCreateForm.getPassword1(), userCreateForm.getEmail());
         } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup_form";
         } catch (Exception e) {
-            e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup_form";
         }
@@ -73,7 +71,7 @@ public class UserController {
     }
 
     @GetMapping("/main")
-    public String main(@AuthenticationPrincipal UserDetail userDetail, Model model) {
+    public String home(@AuthenticationPrincipal UserDetail userDetail, Model model) {
         if (userDetail == null) {
             return "redirect:/user/login";
         }
@@ -127,12 +125,9 @@ public class UserController {
     @PostMapping("/update")
     public String update(@AuthenticationPrincipal UserDetail userDetail, @RequestParam("nickname") String nickname) {
         SiteUser user = userService.getUser(userDetail.getUsername());
-        if(user.getNickname().equals(nickname)){
-            return "redirect:/user/main";
-        }else{
+        if(!user.getNickname().equals(nickname))
             userService.updateUser(user,nickname);
-            return "redirect:/user/main";
-        }
+        return "redirect:/user/main";
     }
 
     @GetMapping("/passwordupdate")

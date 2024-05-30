@@ -1,6 +1,5 @@
     package com.example.first_project.friendship;
 
-    import com.fasterxml.jackson.databind.util.ArrayBuilders;
     import com.querydsl.core.BooleanBuilder;
     import com.querydsl.jpa.impl.JPAQueryFactory;
     import org.springframework.beans.factory.annotation.Autowired;

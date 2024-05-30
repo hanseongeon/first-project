@@ -1,7 +1,5 @@
 package com.example.first_project.friendship;
 
-import org.springframework.data.repository.query.Param;
-
 import java.util.List;
 import java.util.Optional;
 
