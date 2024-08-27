@@ -35,4 +35,4 @@
 - Thymeleaf
 - WebSocket
 
-  ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/81b8d5d3-b713-4f72-88e4-0f61b0524134/3232162c-090c-462e-b9e0-64dd8aef1bb9/Untitled.png)
+  ![Untitled]()
